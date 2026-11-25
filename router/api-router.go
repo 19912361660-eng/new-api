@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"new-api/controller/mock"
 
 	"github.com/QuantumNous/new-api/controller"
 	"github.com/QuantumNous/new-api/middleware"
@@ -172,6 +173,16 @@ func SetApiRouter(router *gin.Engine) {
 				adminRoute.DELETE("/:id/2fa", controller.AdminDisable2FA)
 			}
 		}
+		//新加入的模拟消费相关路由
+		mockGroup := adminRoute.Group("/mock-consume")
+		{
+			mockGroup.POST("/preview", mock.PreviewMockConsume)
+			mockGroup.POST("/submit", mock.SubmitMockConsume)
+			mockGroup.GET("/model-list", mock.GetAllModelList)
+			mockGroup.GET("/user-list", mock.GetSimpleUserList)
+			mockGroup.POST("/batch-delete", mock.BatchDeleteByBatchId)
+		}
+		//模拟消费相关路由结束
 
 		// Subscription billing (plans, purchase, admin management)
 		subscriptionRoute := apiRouter.Group("/subscription")
